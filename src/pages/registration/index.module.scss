@@ -1,0 +1,66 @@
+.btnBack {
+  position: fixed;
+  z-index: 3;
+  top: 10px;
+  left: 10px;
+}
+
+.formWrapper {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+
+  height: 100vh;
+}
+
+.verificationWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+
+  margin: 10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.errorMsg {
+  position: absolute;
+  top: 35%;
+  left: 240px;
+
+  width: 200px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+
+  font-size: 14px;
+  font-weight: 700;
+  color: red;
+
+  @media (width < 768px) {
+    position: static;
+    padding-top: 5px;
+  }
+}
+
+.fieldWrapper {
+  position: relative;
+
+  @media (width < 768px) {
+    position: static;
+    display: flex;
+    flex-direction: column;
+  }
+}

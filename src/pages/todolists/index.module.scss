@@ -1,0 +1,33 @@
+.logout {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+}
+
+.createTodoWrapper {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 70px;
+
+  @media (width < 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 10px;
+  }
+}
+
+.todolists {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+
+  margin-top: 50px;
+
+  @media (width < 768px) {
+    flex-direction: column;
+    align-items: center;
+
+  }
+}

@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.editInput {
+  width: 100%;
+  border-color: blue;
+}
+
+.buttonsWrapper {
+  display: flex;
+  gap: 10px;
+}
