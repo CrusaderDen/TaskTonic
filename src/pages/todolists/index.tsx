@@ -1,4 +1,5 @@
 import { CreateTodolist } from '@/components/create-todolist/create-todolist'
+import { Loader } from '@/components/loader/loader'
 import { Todolist } from '@/components/todolist/todolist'
 import { useLogoutMutation } from '@/service/auth/auth-api'
 import { useGetTodoListsQuery } from '@/service/todolists/todolists-api'
@@ -9,8 +10,8 @@ import s from './index.module.scss'
 
 export default function Todolists() {
   const router = useRouter()
-  const [getLogout] = useLogoutMutation()
-  const { data: todolists } = useGetTodoListsQuery()
+  const [getLogout, { isLoading: isLogoutLoading }] = useLogoutMutation()
+  const { data: todolists, isLoading: isTodoLoading } = useGetTodoListsQuery()
 
   const handleLogout = async () => {
     await getLogout()
@@ -20,6 +21,7 @@ export default function Todolists() {
 
   return (
     <>
+      {(isLogoutLoading || isTodoLoading) && <Loader />}
       <Button className={s.logout} onClick={handleLogout} variant={'outlined'}>
         Logout
       </Button>

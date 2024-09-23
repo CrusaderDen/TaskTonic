@@ -1,16 +1,28 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { Loader } from '@/components/loader/loader'
 import { VideoBackground } from '@/components/video-background/video-background'
 import { useCreateUserMutation, useVerifyEmailMutation } from '@/service/auth/auth-api'
 import { UserArgs } from '@/service/auth/auth-api-types'
 import { Button } from '@/shared/lib/ui/button/button'
 import { Input } from '@/shared/lib/ui/input/input'
+import { notifyError } from '@/shared/utils/toastConfig'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 import s from './index.module.scss'
+
+type ServerError = {
+  data: {
+    data: string
+    httpCode: number
+    messages: string
+    resultCode: number
+  }
+  status: number
+}
 
 const registrationSchema = z.object({
   confirmPassword: z.string(),
@@ -29,7 +41,7 @@ export default function Registration() {
     register,
     setError,
   } = useForm<registrationSchemaData>({ resolver: zodResolver(registrationSchema) })
-  const [createUser] = useCreateUserMutation()
+  const [createUser, { isLoading }] = useCreateUserMutation()
   const [verifyEmail] = useVerifyEmailMutation()
   const [verificationCode, setVerificationCode] = useState('')
   const onSubmit = async (data: any) => {
@@ -42,10 +54,26 @@ export default function Registration() {
       return
     }
 
-    const userData: UserArgs = { ...data, name: 'some_name', surname: 'some_surname' }
+    try {
+      const userData: UserArgs = { ...data, name: 'some_name', surname: 'some_surname' }
 
-    await createUser(userData)
-    alert('Please check your email, we have already sent you a verification code.')
+      await createUser(userData)
+      alert('Please check your email, we have already sent you a verification code.')
+    } catch (error) {
+      if (error && typeof error === 'object' && 'status' in error) {
+        if (error.status === 409) {
+          notifyError('This email is already registered. Please use a different email address.')
+        } else if (error.status === 400) {
+          notifyError(`Please, check your data. ${(error as ServerError).data.messages}`)
+        } else if (error.status === 500) {
+          notifyError('Internal server error. Please try again later.')
+        } else {
+          notifyError('An unexpected error occurred. Please try again.')
+        }
+      } else {
+        notifyError('An unexpected error occurred. Please try again.')
+      }
+    }
   }
 
   const handleVerifyEmail = async () => {
@@ -58,6 +86,7 @@ export default function Registration() {
 
   return (
     <>
+      {isLoading && <Loader />}
       <div className={s.formWrapper}>
         <Button className={s.btnBack} onClick={() => router.push('/')} variant={'secondary'}>
           Go back

@@ -1,26 +1,15 @@
-import { ToastPosition, toast } from 'react-toastify'
+import { Bounce, toast } from 'react-toastify'
 
-const toastConfig = {
-  autoClose: 3000,
-  closeOnClick: true,
-  draggable: true,
-  hideProgressBar: true,
-  icon: undefined,
-  pauseOnHover: true,
-  position: 'bottom-left' as ToastPosition,
-  progress: undefined,
-}
-
-export const showSuccessToast = (message: string) => {
-  toast.success(message, {
-    ...toastConfig,
-    className: 'toast-success-custom',
-  })
-}
-
-export const showErrorToast = (message: string) => {
-  toast.error(message, {
-    ...toastConfig,
-    className: 'toast-error-custom',
+export const notifyError = (errorMsg: string | undefined) => {
+  toast.error(errorMsg, {
+    autoClose: 5000,
+    closeOnClick: true,
+    draggable: true,
+    hideProgressBar: false,
+    pauseOnHover: true,
+    position: 'bottom-center',
+    progress: undefined,
+    theme: 'colored',
+    transition: Bounce,
   })
 }
