@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Loader } from '@/components/loader/loader'
@@ -51,20 +52,20 @@ export default function Login() {
   }
 
   return (
-    <>
+    <div data-styles={'default'}>
       {isLoading && <Loader />}
       <Button className={s.btnBack} onClick={() => router.push('/')} variant={'secondary'}>
         Go back
       </Button>
       <div className={s.formWrapper}>
-        <h3>Login Page</h3>
+        <h3 className={s.title}>Login Page</h3>
         <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={s.fieldWrapper}>
-            <Input label={'Email'} type={'text'} {...register('email')} />
+            <Input label={'Email'} placeholder={''} type={'text'} {...register('email')} />
             {errors.email && <p className={s.errorMsg}>{errors.email.message}</p>}
           </div>
           <div className={s.fieldWrapper}>
-            <Input label={'Password'} type={'password'} {...register('password')} />
+            <Input label={'Password'} placeholder={''} type={'password'} {...register('password')} />
             {errors.password && <p className={s.errorMsg}>{errors.password.message}</p>}
           </div>
 
@@ -74,6 +75,6 @@ export default function Login() {
         </form>
       </div>
       <VideoBackground />
-    </>
+    </div>
   )
 }

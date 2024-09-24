@@ -85,28 +85,28 @@ export default function Registration() {
   }
 
   return (
-    <>
+    <div data-styles={'default'}>
       {isLoading && <Loader />}
       <div className={s.formWrapper}>
         <Button className={s.btnBack} onClick={() => router.push('/')} variant={'secondary'}>
           Go back
         </Button>
-        <h3>Registration Page</h3>
+        <h3 className={s.title}>Registration Page</h3>
         <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={s.fieldWrapper}>
-            <Input label={'Login'} type={'text'} {...register('login')} />
+            <Input label={'Login'} placeholder={''} type={'text'} {...register('login')} />
             {errors.login && <span className={s.errorMsg}>{errors.login.message}</span>}
           </div>
           <div className={s.fieldWrapper}>
-            <Input label={'Email'} type={'email'} {...register('email')} />
+            <Input label={'Email'} placeholder={''} type={'email'} {...register('email')} />
             {errors.email && <p className={s.errorMsg}>{errors.email.message}</p>}
           </div>
           <div className={s.fieldWrapper}>
-            <Input label={'Password'} type={'password'} {...register('password')} />
+            <Input label={'Password'} placeholder={''} type={'password'} {...register('password')} />
             {errors.password && <p className={s.errorMsg}>{errors.password.message}</p>}
           </div>
           <div className={s.fieldWrapper}>
-            <Input label={'Confirm Password'} type={'password'} {...register('confirmPassword')} />
+            <Input label={'Confirm Password'} placeholder={''} type={'password'} {...register('confirmPassword')} />
             {errors.confirmPassword && <p className={s.errorMsg}>{errors.confirmPassword.message}</p>}
           </div>
 
@@ -120,6 +120,7 @@ export default function Registration() {
             onChange={e => {
               setVerificationCode(e.target.value)
             }}
+            placeholder={''}
             value={verificationCode}
           />
           <Button onClick={handleVerifyEmail} variant={'ghost'}>
@@ -128,6 +129,6 @@ export default function Registration() {
         </div>
       </div>
       <VideoBackground />
-    </>
+    </div>
   )
 }

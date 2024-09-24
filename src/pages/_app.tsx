@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 
 import { store } from '@/service/store'
+import { ThemeProvider } from 'next-themes'
 
 import '@/styles/_colors.scss'
 import '@/styles/_typography.scss'
@@ -14,7 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Provider store={store}>
-        <Component {...pageProps} />
+        <ThemeProvider themes={['light', 'dark', 'gray']}>
+          <Component {...pageProps} />
+        </ThemeProvider>
       </Provider>
       <ToastContainer />
     </>

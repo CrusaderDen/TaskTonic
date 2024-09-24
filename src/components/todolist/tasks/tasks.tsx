@@ -40,7 +40,7 @@ export const Tasks = ({ id }: TasksProps) => {
       <div className={s.title}> Таски</div>
       <div className={s.inputTask}>
         <Input onChange={handleInputChange} placeholder={'Введите задачу'} value={taskTitle} />
-        <Button onClick={handleCreateTask} variant={'secondary'}>
+        <Button onClick={handleCreateTask} variant={'outlined'}>
           OK
         </Button>
       </div>

@@ -45,36 +45,105 @@ a {
 */
 
 :root {
-  --background: #0a0a0a; /* Темный фон */
-  --foreground: #ededed; /* Светлый текст */
+    --background-color: var(--color-dark-900);
+    --text-color: var(--color-light-100);
 }
+
+[data-theme='dark'] {
+    --background-color: var(--color-dark-900);
+    --text-color: var(--color-light-100);
+    --input-text: var(--color-light-100);
+    --input-text-error: var(--color-danger-500);
+    --input-label: var(--color-light-900);
+    --input-field: transparent;
+    --input-field-autofill: black;
+    --input-field-active: black;
+    --input-field-focus: var(--color-dark-500);
+    --input-border: var(--color-light-900);
+    --input-border-hover: var(--color-dark-100);
+    --input-border-focus: var(--color-light-100);
+    --input-placeholder: var(--color-light-900);
+    --input-placeholder-focus: var(--color-light-100);
+}
+
+[data-theme='light'] {
+    --background-color: var(--color-light-100);
+    --text-color: var(--color-dark-900);
+    --input-text: var(--color-dark-900);
+    --input-text-error: var(--color-danger-500);
+    --input-label: var(--color-dark-900);
+    --input-field: transparent;
+    --input-field-autofill: var(--color-light-300);
+    --input-field-active: var(--color-light-300);
+    --input-field-focus: var(--color-light-500);
+    --input-border: var(--color-dark-600);
+    --input-border-hover: var(--color-dark-700);
+    --input-border-focus: var(--color-dark-700);
+    --input-placeholder: var(--color-light-900);
+    --input-placeholder-focus: var(--color-light-200);
+}
+
+[data-theme='gray'] {
+    --background-color: var(--color-gray-100);
+    --text-color: var(--color-dark-900);
+    --input-text: var(--color-dark-900);
+    --input-text-error: var(--color-danger-500);
+    --input-label: var(--color-dark-900);
+    --input-field: transparent;
+    --input-field-autofill: var(--color-gray-300);
+    --input-field-active: var(--color-gray-300);
+    --input-field-focus: var(--color-dark-500);
+    --input-border: var(--color-light-900);
+    --input-border-hover: var(--color-dark-100);
+    --input-border-focus: var(--color-light-100);
+    --input-placeholder: var(--color-light-900);
+    --input-placeholder-focus: var(--color-light-100);
+}
+
+[data-styles='default'] {
+    --background-color: var(--color-dark-900);
+    --text-color: var(--color-light-100);
+    --input-text: var(--color-light-100);
+    --input-text-error: var(--color-danger-500);
+    --input-label: var(--color-light-900);
+    --input-field: transparent;
+    --input-field-autofill: black;
+    --input-field-focus: var(--color-dark-500);
+    --input-field-active: black;
+    --input-border: var(--color-light-900);
+    --input-border-hover: var(--color-dark-100);
+    --input-border-focus: var(--color-light-100);
+    --input-placeholder: var(--color-light-900);
+    --input-placeholder-focus: var(--color-light-100);
+}
+
 
 html,
 body {
-  overflow-x: hidden;
-  max-width: 100vw;
+    overflow-x: hidden;
+    max-width: 100vw;
+
+
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--text-color);
 
-  background: var(--background);
+    background: var(--background-color);
 }
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
-html {
-  color-scheme: dark !important;
-}
+

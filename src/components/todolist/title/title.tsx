@@ -17,7 +17,9 @@ export const Title = ({ id, title }: TitleProps) => {
   return (
     <div className={s.wrapper}>
       <h3>{title}</h3>
-      <Button onClick={() => handleDeleteTodolist(id)}>Удалить лист</Button>
+      <Button onClick={() => handleDeleteTodolist(id)} variant={'outlined'}>
+        Удалить лист
+      </Button>
     </div>
   )
 }

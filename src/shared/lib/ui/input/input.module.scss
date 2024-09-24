@@ -1,9 +1,13 @@
 // Label
 .label {
   cursor: pointer;
+
   display: block;
+
+  margin-bottom: 2px;
+
   font-size: var(--font-size-s);
-  color: var(--color-light-900);
+  color: var(--input-label);
 }
 
 // Container
@@ -29,41 +33,44 @@
   padding: 6px 12px;
 
   font-size: var(--font-size-m);
-  color: var(--color-light-100);
+  color: var(--input-text);
 
-  background-color: var(--color-dark-900);
-  border: 1px solid var(--color-light-900);
+  background-color: var(--input-field);
+  border: 1px solid var(--input-border);
   border-radius: 2px;
   outline: none;
 
   &::placeholder {
-    color: var(--color-light-900);
+    color: var(--input-placeholder);
   }
 
   &:hover {
-    border-color: var(--color-dark-100);
+    border-color: var(--input-border-hover);
+  }
+
+  &:not(:placeholder-shown) {
+    background-color: var(--input-field-active);
   }
 
   &:focus {
-    background-color: var(--color-dark-500);
-    border-color: var(--color-light-100);
+    background-color: var(--input-field-focus);
+    border-color: var(--input-border-focus);
 
     &::placeholder {
-      color: var(--color-light-100);
+      color: var(--input-placeholder-focus);
     }
   }
-}
 
-// autofill styling
-.input-autofill {
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
-  &:-webkit-autofill:focus {
-    box-shadow: 0 0 0 1000px black inset;
+  &:-webkit-autofill:focus, {
+    background-color: var(--input-field-autofill) !important;
+    box-shadow: 0 0 0 1000px var(--input-field-autofill) inset !important;
 
-    -webkit-text-fill-color: var(--color-light-100);
+    -webkit-text-fill-color: var(--input-text) !important;
   }
 }
+
 
 // InputSearch specific styling
 .inputSearch {
@@ -77,14 +84,13 @@
   margin-top: 2px;
 
   font-size: var(--font-size-xs);
-  color: var(--color-danger-500);
+  color: var(--input-text-error);
 
   visibility: hidden;
   opacity: 0;
 
-  transition:
-    visibility 0.3s ease,
-    opacity 0.3s ease;
+  transition: visibility 0.3s ease,
+  opacity 0.3s ease;
 
   &.show {
     visibility: visible;

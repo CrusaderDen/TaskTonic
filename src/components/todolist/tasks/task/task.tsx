@@ -62,7 +62,7 @@ export const Task = ({ id, taskId, title }: TaskProps) => {
         {onEditField}
         <div className={s.buttonsWrapper}>
           {onEditButton}
-          <Button onClick={handleDeleteTask} variant={'secondary'}>
+          <Button onClick={handleDeleteTask} variant={'outlined'}>
             Удалить
           </Button>
         </div>

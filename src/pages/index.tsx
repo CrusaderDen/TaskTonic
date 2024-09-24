@@ -4,6 +4,7 @@ import localFont from 'next/font/local'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
+import s from './index.module.scss'
 import styles from '@/styles/Home.module.css'
 
 const geistSans = localFont({
@@ -21,7 +22,7 @@ export default function Home() {
   const router = useRouter()
 
   return (
-    <>
+    <div data-styles={'default'}>
       <div style={{ display: 'flex', gap: '20px', left: '10px', position: 'fixed', top: '10px', zIndex: '3' }}>
         <Button onClick={() => router.push('registration')} variant={'secondary'}>
           Go to the Registration page
@@ -38,11 +39,11 @@ export default function Home() {
       </Head>
       <div className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}>
         <main className={styles.main}>
-          <div style={{ fontSize: '34px', fontWeight: '500' }}>Todolists app with new API</div>
+          <div className={s.title}>Todolists app with new API</div>
         </main>
         <footer className={styles.footer}></footer>
       </div>
       <VideoBackground />
-    </>
+    </div>
   )
 }
