@@ -1,7 +1,21 @@
 .wrapper {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  min-width: 350px;
 }
+
+.btnWrapper {
+  display: flex;
+}
+
+.icon {
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+
+

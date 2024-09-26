@@ -1,8 +1,12 @@
 export type getTodolistsResponse = todolistServerType[]
 export type todolistServerType = {
-  addedDate: string
+  addedDate: null | string
+  backgroundColor: string
+  endDate: null | string
   id: string
   order: number
+  startDate: string
+  textColor: string
   title: string
 }
 

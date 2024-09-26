@@ -50,7 +50,7 @@ a {
 }
 
 [data-theme='dark'] {
-    --background-color: var(--color-dark-900);
+    --background-color: var(--color-dark-600);
     --text-color: var(--color-light-100);
     --input-text: var(--color-light-100);
     --input-text-error: var(--color-danger-500);
@@ -64,6 +64,8 @@ a {
     --input-border-focus: var(--color-light-100);
     --input-placeholder: var(--color-light-900);
     --input-placeholder-focus: var(--color-light-100);
+    --sidebar-text: var(--color-light-100);
+    --sidebar-background: var(--color-dark-300);
 }
 
 [data-theme='light'] {
@@ -81,23 +83,8 @@ a {
     --input-border-focus: var(--color-dark-700);
     --input-placeholder: var(--color-light-900);
     --input-placeholder-focus: var(--color-light-200);
-}
-
-[data-theme='gray'] {
-    --background-color: var(--color-gray-100);
-    --text-color: var(--color-dark-900);
-    --input-text: var(--color-dark-900);
-    --input-text-error: var(--color-danger-500);
-    --input-label: var(--color-dark-900);
-    --input-field: transparent;
-    --input-field-autofill: var(--color-gray-300);
-    --input-field-active: var(--color-gray-300);
-    --input-field-focus: var(--color-dark-500);
-    --input-border: var(--color-light-900);
-    --input-border-hover: var(--color-dark-100);
-    --input-border-focus: var(--color-light-100);
-    --input-placeholder: var(--color-light-900);
-    --input-placeholder-focus: var(--color-light-100);
+    --sidebar-text: var(--color-dark-900);
+    --sidebar-background: var(--color-gray-100);
 }
 
 [data-styles='default'] {

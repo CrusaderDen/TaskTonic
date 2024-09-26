@@ -1,12 +1,16 @@
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 import { useCreateTodolistMutation } from '@/service/todolists/todolists-api'
 import { Button } from '@/shared/lib/ui/button/button'
 import { Input } from '@/shared/lib/ui/input/input'
 
+import s from './create-todolist.module.scss'
+
 export const CreateTodolist = () => {
   const [todoTitle, setTodoTitle] = useState('')
   const [createTodolist] = useCreateTodolistMutation()
+  const { handleSubmit } = useForm()
 
   const handleCreateTodolist = async () => {
     const data = { order: 0, title: todoTitle }
@@ -16,16 +20,14 @@ export const CreateTodolist = () => {
   }
 
   return (
-    <>
+    <form className={s.wrapper} onSubmit={handleSubmit(handleCreateTodolist)}>
       <Input
+        className={s.input}
         onChange={e => setTodoTitle(e.target.value)}
-        placeholder={'Название'}
-        style={{ width: '200px' }}
+        placeholder={'Создать задачу'}
         value={todoTitle}
       />
-      <Button onClick={handleCreateTodolist} variant={'outlined'}>
-        Создать
-      </Button>
-    </>
+      <button className={s.btn}>+</button>
+    </form>
   )
 }

@@ -12,6 +12,7 @@ import '@/styles/_colors.scss'
 import '@/styles/_typography.scss'
 import '@/styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css'
+import 'react-datepicker/dist/react-datepicker.css'
 
 export type NextPageWithLayout<P = {}, IP = P> = {
   getLayout?: (page: ReactElement) => ReactNode
@@ -27,7 +28,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <>
       <Provider store={store}>
-        <ThemeProvider themes={['light', 'dark', 'gray']}>
+        <ThemeProvider themes={['light', 'dark']}>
           <ToastContainer />
           {getLayout(<Component {...pageProps} />)}
         </ThemeProvider>

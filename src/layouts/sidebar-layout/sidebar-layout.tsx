@@ -3,6 +3,7 @@ import { PropsWithChildren, ReactElement, useEffect, useState } from 'react'
 import { Loader } from '@/components/loader/loader'
 import { useLogoutMutation } from '@/service/auth/auth-api'
 import { Button } from '@/shared/lib/ui/button/button'
+import { Selector } from '@/shared/lib/ui/select/select'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTheme } from 'next-themes'
@@ -32,27 +33,30 @@ export const SidebarLayout = ({ children }: PropsWithChildren) => {
   return (
     <>
       {isLogoutLoading && <Loader />}
-      <div className={s.main}>
-        <nav className={s.navbar}>
-          <select className={s.themeSelector} onChange={e => setTheme(e.target.value)} value={theme}>
-            <option value={'light'}>Светлая</option>
-            <option value={'gray'}>Серая</option>
-            <option value={'dark'}>Темная</option>
-          </select>
-          <ul className={s.navList}>
-            <li>
-              <Link href={'/todolists'}>Задачи</Link>
-            </li>
-            <li>
-              <Link href={'/planning'}>Планирование</Link>
-            </li>
-          </ul>
-          <Button className={s.logout} onClick={handleLogout} variant={'outlined'}>
-            Logout
-          </Button>
-        </nav>
+      <main className={s.main}>
+        <aside className={s.aside}>
+          <nav className={s.navbar}>
+            <ul className={s.navList}>
+              <li>
+                <Link href={'/todolists'}>Задачи</Link>
+              </li>
+              <li>
+                <Link href={'/planning'}>Планирование</Link>
+              </li>
+            </ul>
+          </nav>
+          <div className={s.lowGroup}>
+            <select className={s.selector} onChange={e => setTheme(e.target.value)} value={theme}>
+              <option value={'light'}>Светлая</option>
+              <option value={'dark'}>Темная</option>
+            </select>
+            <Button className={s.logout} onClick={handleLogout} variant={'outlined'}>
+              Выйти
+            </Button>
+          </div>
+        </aside>
         {children}
-      </div>
+      </main>
     </>
   )
 }
