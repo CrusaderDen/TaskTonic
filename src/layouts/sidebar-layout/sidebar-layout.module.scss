@@ -1,0 +1,27 @@
+.main {
+  display: flex;
+  height: 100dvh;
+}
+
+.navbar {
+  overflow: hidden;
+  display: flex;
+  flex: 0 0 200px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-top: 200px;
+
+  box-shadow: 2px 2px 5px black;
+}
+
+.navList {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.logout {
+  margin-bottom: 30px;
+}
