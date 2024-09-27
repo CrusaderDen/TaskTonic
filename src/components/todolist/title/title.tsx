@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
 
 import { useDeleteTodolistMutation, useUpdateTodolistMutation } from '@/service/todolists/todolists-api'
+import { todolistServerType } from '@/service/todolists/todolists-api-types'
 import { Button } from '@/shared/lib/ui/button/button'
 import { Input } from '@/shared/lib/ui/input/input'
 import { CalendarIcon } from '@radix-ui/react-icons'
@@ -10,11 +11,11 @@ import * as Popover from '@radix-ui/react-popover'
 import s from './title.module.scss'
 
 type TitleProps = {
-  id: string
-  title: string
+  endDate?: string
+  todo: todolistServerType
   withoutEditButtons?: true
 }
-export const Title = ({ id, title, withoutEditButtons }: TitleProps) => {
+export const Title = ({ endDate, todo, withoutEditButtons }: TitleProps) => {
   const [newTodoTitle, setNewTodoTitle] = useState('')
   const [editMode, setEditMode] = useState(false)
   const [showCalendar, setShowCalendar] = useState(false)
@@ -23,7 +24,7 @@ export const Title = ({ id, title, withoutEditButtons }: TitleProps) => {
   const [deleteTodolist] = useDeleteTodolistMutation()
 
   const handleUpdateTodolistTitle = async (id: string) => {
-    const data = { id, order: 0, title: newTodoTitle }
+    const data = { ...todo, title: newTodoTitle }
 
     await updateTodolist(data).unwrap()
     setNewTodoTitle('')
@@ -39,16 +40,26 @@ export const Title = ({ id, title, withoutEditButtons }: TitleProps) => {
     setNewTodoTitle('')
   }
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      handleReset()
-    } else if (event.key === 'Enter' && editMode) {
-      void handleUpdateTodolistTitle(id)
-    }
-  }
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        handleReset()
+      } else if (event.key === 'Enter' && editMode) {
+        void handleUpdateTodolistTitle(todo.id)
+      }
+    },
+    [editMode, handleReset, handleUpdateTodolistTitle, todo.id]
+  )
 
   const openCalendar = () => {
     setShowCalendar(true)
+  }
+
+  const handleDate = async (startDate: any) => {
+    const parsedDate = new Date(startDate).toISOString()
+    const data = { ...todo, endDate: parsedDate }
+
+    await updateTodolist(data).unwrap()
   }
 
   useEffect(() => {
@@ -57,42 +68,57 @@ export const Title = ({ id, title, withoutEditButtons }: TitleProps) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [editMode, newTodoTitle])
+  }, [editMode, handleKeyDown, newTodoTitle])
 
   const calendar = (
-    <DatePicker
-      dateFormat={'MMMM d, yyyy h:mm aa'}
-      inline
-      onChange={(date: any) => {
-        setStartDate(date)
-        alert(date)
-      }}
-      selected={startDate}
-      showTimeSelect
-      timeCaption={'time'}
-      timeFormat={'HH:mm'}
-      timeIntervals={15}
-    />
+    <div>
+      <DatePicker
+        dateFormat={'MMMM d, yyyy h:mm aa'}
+        inline
+        onChange={(date: any) => {
+          setStartDate(date)
+        }}
+        selected={startDate}
+        showTimeSelect
+        timeCaption={'time'}
+        timeFormat={'HH:mm'}
+        timeIntervals={15}
+      />
+      <Button fullWidth onClick={() => handleDate(startDate)}>
+        Подтвердить время
+      </Button>
+    </div>
   )
 
   return (
     <div>
       {!editMode ? (
         <div className={s.wrapper}>
-          <span>{title}</span>
+          <div style={{ alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+            <span>{todo.title}</span>
+            <Button
+              className={s.icon}
+              onClick={() => setEditMode(true)}
+              style={{ fontSize: '12px', left: '-10px', position: 'relative', top: '-7px' }}
+              variant={'ghost'}
+            >
+              ✏️
+            </Button>
+          </div>
           {!withoutEditButtons ? (
             <div className={s.btnWrapper}>
-              <Button className={s.icon} onClick={() => setEditMode(true)} variant={'ghost'}>
-                ✏️
-              </Button>
-              <Button className={s.icon} onClick={() => handleDeleteTodolist(id)} variant={'ghost'}>
+              <Button className={s.icon} onClick={() => handleDeleteTodolist(todo.id)} variant={'ghost'}>
                 🗑️
               </Button>
             </div>
           ) : (
             <Popover.Root>
               <Popover.Trigger asChild>
-                <button onClick={openCalendar} style={{ backgroundColor: 'transparent', border: 'none' }}>
+                <button
+                  onClick={openCalendar}
+                  style={{ backgroundColor: 'transparent', border: 'none' }}
+                  type={'button'}
+                >
                   <CalendarIcon />
                 </button>
               </Popover.Trigger>
@@ -115,7 +141,7 @@ export const Title = ({ id, title, withoutEditButtons }: TitleProps) => {
           <Button
             className={s.icon}
             disabled={!newTodoTitle}
-            onClick={() => handleUpdateTodolistTitle(id)}
+            onClick={() => handleUpdateTodolistTitle(todo.id)}
             variant={'ghost'}
           >
             ✔️

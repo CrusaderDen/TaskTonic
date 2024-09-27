@@ -20,11 +20,8 @@ export type createTodolistResponse = {
   messages: string
   resultCode: number
 }
-export type updateTodolistArgs = {
-  id: string
-  order: number
-  title: string
-}
+export type updateTodolistArgs = todolistServerType
+
 export type updateTodolistResponse = {
   id: string
   order: number

@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <>
       <Provider store={store}>
-        <ThemeProvider themes={['light', 'dark']}>
+        <ThemeProvider defaultTheme={'dark'} themes={['light', 'dark']}>
           <ToastContainer />
           {getLayout(<Component {...pageProps} />)}
         </ThemeProvider>

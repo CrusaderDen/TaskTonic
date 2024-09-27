@@ -3,7 +3,6 @@ import { PropsWithChildren, ReactElement, useEffect, useState } from 'react'
 import { Loader } from '@/components/loader/loader'
 import { useLogoutMutation } from '@/service/auth/auth-api'
 import { Button } from '@/shared/lib/ui/button/button'
-import { Selector } from '@/shared/lib/ui/select/select'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTheme } from 'next-themes'
@@ -38,7 +37,7 @@ export const SidebarLayout = ({ children }: PropsWithChildren) => {
           <nav className={s.navbar}>
             <ul className={s.navList}>
               <li>
-                <Link href={'/todolists'}>Задачи</Link>
+                <Link href={'/todolists'}>Редактор задач</Link>
               </li>
               <li>
                 <Link href={'/planning'}>Планирование</Link>

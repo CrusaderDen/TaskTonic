@@ -13,7 +13,7 @@ function Planning() {
       <div className={s.todolists}>
         {todolists
           ?.filter(todo => !todo.endDate)
-          .map(todo => <Todolist id={todo.id} key={todo.id} title={todo.title} withoutEditButtons />)}
+          .map(todo => <Todolist key={todo.id} todo={todo} withoutEditButtons />)}
       </div>
     </div>
   )

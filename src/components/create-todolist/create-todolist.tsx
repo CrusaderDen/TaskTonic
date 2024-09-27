@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useCreateTodolistMutation } from '@/service/todolists/todolists-api'
-import { Button } from '@/shared/lib/ui/button/button'
 import { Input } from '@/shared/lib/ui/input/input'
 
 import s from './create-todolist.module.scss'
@@ -27,7 +26,9 @@ export const CreateTodolist = () => {
         placeholder={'Создать задачу'}
         value={todoTitle}
       />
-      <button className={s.btn}>+</button>
+      <button className={s.btn} type={'submit'}>
+        +
+      </button>
     </form>
   )
 }

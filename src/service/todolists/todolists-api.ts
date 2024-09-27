@@ -39,7 +39,7 @@ export const todolistsApi = appApi.injectEndpoints({
         invalidatesTags: ['todolists'],
         query: args => {
           return {
-            body: { order: args.order, title: args.title },
+            body: args,
             method: 'PUT',
             url: `/todo-lists/${args.id}`,
           }
