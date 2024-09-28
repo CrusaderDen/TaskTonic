@@ -1,18 +1,19 @@
+import { Tasks } from '@/components/todolist/tasks/tasks'
 import { Title } from '@/components/todolist/title/title'
 import { todolistServerType } from '@/service/todolists/todolists-api-types'
 
 import s from './todolist.module.scss'
 
 type TodolistProps = {
+  addCalendar?: true
   endDate?: string
   todo: todolistServerType
-  withoutEditButtons?: true
 }
-export const Todolist = ({ endDate, todo, withoutEditButtons }: TodolistProps) => {
+export const Todolist = ({ addCalendar, endDate, todo }: TodolistProps) => {
   return (
     <div className={s.wrapper} key={todo.id}>
-      <Title endDate={endDate} todo={todo} withoutEditButtons={withoutEditButtons} />
-      {/*<Tasks id={id} />*/}
+      <Title addCalendar={addCalendar} endDate={endDate} todo={todo} />
+      {/*<Tasks id={todo.id} />*/}
     </div>
   )
 }

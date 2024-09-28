@@ -35,7 +35,7 @@ export default function Login() {
     try {
       await getLogin(data)
         .unwrap()
-        .then(() => void router.push('/todolists'))
+        .then(() => void router.push('/editor'))
     } catch (error) {
       if (error && typeof error === 'object' && 'status' in error) {
         if (error.status === 400 || error.status === 404) {

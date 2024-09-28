@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app'
 
-import { ReactElement, ReactNode } from 'react'
+import { ReactElement, ReactNode, useEffect } from 'react'
 import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 

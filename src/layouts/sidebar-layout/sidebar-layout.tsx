@@ -37,10 +37,14 @@ export const SidebarLayout = ({ children }: PropsWithChildren) => {
           <nav className={s.navbar}>
             <ul className={s.navList}>
               <li>
-                <Link href={'/todolists'}>Редактор задач</Link>
+                <Link className={router.pathname === '/editor' ? s.linkActive : ''} href={'/editor'}>
+                  Редактор задач
+                </Link>
               </li>
               <li>
-                <Link href={'/planning'}>Планирование</Link>
+                <Link className={router.pathname === '/dashboard' ? s.linkActive : ''} href={'/dashboard'}>
+                  Дашборд
+                </Link>
               </li>
             </ul>
           </nav>

@@ -13,7 +13,7 @@ export const todolistsApi = appApi.injectEndpoints({
   endpoints: builder => {
     return {
       createTodolist: builder.mutation<createTodolistResponse, createTodolistArgs>({
-        invalidatesTags: ['todolists'],
+        invalidatesTags: ['editor'],
         query: args => {
           return {
             body: args,
@@ -23,7 +23,7 @@ export const todolistsApi = appApi.injectEndpoints({
         },
       }),
       deleteTodolist: builder.mutation<deleteTodolistResponse, deleteTodolistArgs>({
-        invalidatesTags: ['todolists'],
+        invalidatesTags: ['editor'],
         query: args => {
           return {
             method: 'DELETE',
@@ -32,11 +32,11 @@ export const todolistsApi = appApi.injectEndpoints({
         },
       }),
       getTodoLists: builder.query<getTodolistsResponse, void>({
-        providesTags: ['todolists'],
+        providesTags: ['editor'],
         query: () => '/todo-lists',
       }),
       updateTodolist: builder.mutation<updateTodolistResponse, updateTodolistArgs>({
-        invalidatesTags: ['todolists'],
+        invalidatesTags: ['editor'],
         query: args => {
           return {
             body: args,
@@ -49,5 +49,10 @@ export const todolistsApi = appApi.injectEndpoints({
   },
 })
 
-export const { useCreateTodolistMutation, useDeleteTodolistMutation, useGetTodoListsQuery, useUpdateTodolistMutation } =
-  todolistsApi
+export const {
+  useCreateTodolistMutation,
+  useDeleteTodolistMutation,
+  useGetTodoListsQuery,
+  useLazyGetTodoListsQuery,
+  useUpdateTodolistMutation,
+} = todolistsApi

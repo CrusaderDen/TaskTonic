@@ -6,5 +6,5 @@ export const appApi = createApi({
     credentials: 'include',
   }),
   endpoints: () => ({}),
-  tagTypes: ['todolists', 'tasks'],
+  tagTypes: ['editor', 'tasks'],
 })

@@ -5,47 +5,47 @@ import { useDeleteTodolistMutation, useUpdateTodolistMutation } from '@/service/
 import { todolistServerType } from '@/service/todolists/todolists-api-types'
 import { Button } from '@/shared/lib/ui/button/button'
 import { Input } from '@/shared/lib/ui/input/input'
-import { CalendarIcon } from '@radix-ui/react-icons'
 import * as Popover from '@radix-ui/react-popover'
+import { startOfToday, subDays } from 'date-fns'
 
 import s from './title.module.scss'
 
 type TitleProps = {
+  addCalendar?: true
   endDate?: string
   todo: todolistServerType
-  withoutEditButtons?: true
 }
-export const Title = ({ endDate, todo, withoutEditButtons }: TitleProps) => {
+export const Title = ({ addCalendar, endDate, todo }: TitleProps) => {
   const [newTodoTitle, setNewTodoTitle] = useState('')
   const [editMode, setEditMode] = useState(false)
   const [showCalendar, setShowCalendar] = useState(false)
-  const [startDate, setStartDate] = useState(new Date())
+  const [startDate, setStartDate] = useState(todo.endDate ? new Date(todo.endDate) : new Date())
   const [updateTodolist] = useUpdateTodolistMutation()
   const [deleteTodolist] = useDeleteTodolistMutation()
 
-  const handleUpdateTodolistTitle = async (id: string) => {
+  const handleUpdateTodolistTitle = useCallback(async () => {
     const data = { ...todo, title: newTodoTitle }
 
     await updateTodolist(data).unwrap()
     setNewTodoTitle('')
     setEditMode(false)
-  }
+  }, [newTodoTitle, todo, updateTodolist])
 
   const handleDeleteTodolist = async (id: string) => {
     await deleteTodolist(id).unwrap()
   }
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setEditMode(false)
     setNewTodoTitle('')
-  }
+  }, [])
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         handleReset()
       } else if (event.key === 'Enter' && editMode) {
-        void handleUpdateTodolistTitle(todo.id)
+        void handleUpdateTodolistTitle()
       }
     },
     [editMode, handleReset, handleUpdateTodolistTitle, todo.id]
@@ -56,10 +56,18 @@ export const Title = ({ endDate, todo, withoutEditButtons }: TitleProps) => {
   }
 
   const handleDate = async (startDate: any) => {
+    setShowCalendar(false)
     const parsedDate = new Date(startDate).toISOString()
     const data = { ...todo, endDate: parsedDate }
 
     await updateTodolist(data).unwrap()
+  }
+
+  const isDateAllowed = (date: any) => {
+    const today = startOfToday()
+    const yesterday = subDays(today, 1)
+
+    return date >= yesterday
   }
 
   useEffect(() => {
@@ -74,15 +82,16 @@ export const Title = ({ endDate, todo, withoutEditButtons }: TitleProps) => {
     <div>
       <DatePicker
         dateFormat={'MMMM d, yyyy h:mm aa'}
+        filterDate={isDateAllowed}
         inline
         onChange={(date: any) => {
           setStartDate(date)
         }}
         selected={startDate}
-        showTimeSelect
-        timeCaption={'time'}
-        timeFormat={'HH:mm'}
-        timeIntervals={15}
+        // showTimeSelect
+        // timeCaption={'time'}
+        // timeFormat={'HH:mm'}
+        // timeIntervals={15}
       />
       <Button fullWidth onClick={() => handleDate(startDate)}>
         Подтвердить время
@@ -93,8 +102,8 @@ export const Title = ({ endDate, todo, withoutEditButtons }: TitleProps) => {
   return (
     <div>
       {!editMode ? (
-        <div className={s.wrapper}>
-          <div style={{ alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+        <div className={s.commonWrapper}>
+          <div className={s.titleWrapper}>
             <span>{todo.title}</span>
             <Button
               className={s.icon}
@@ -105,31 +114,30 @@ export const Title = ({ endDate, todo, withoutEditButtons }: TitleProps) => {
               ✏️
             </Button>
           </div>
-          {!withoutEditButtons ? (
-            <div className={s.btnWrapper}>
-              <Button className={s.icon} onClick={() => handleDeleteTodolist(todo.id)} variant={'ghost'}>
-                🗑️
-              </Button>
-            </div>
-          ) : (
-            <Popover.Root>
-              <Popover.Trigger asChild>
-                <button
-                  onClick={openCalendar}
-                  style={{ backgroundColor: 'transparent', border: 'none' }}
-                  type={'button'}
-                >
-                  <CalendarIcon />
-                </button>
-              </Popover.Trigger>
+          <div className={s.btnWrapper}>
+            <Popover.Root onOpenChange={() => setShowCalendar(!showCalendar)} open={showCalendar}>
+              <Popover.Anchor asChild>
+                <div>
+                  <Popover.Trigger asChild>
+                    <button className={s.btnCalendar} onClick={openCalendar} type={'button'}>
+                      📅
+                    </button>
+                  </Popover.Trigger>
+                </div>
+              </Popover.Anchor>
               <Popover.Portal>
-                <Popover.Content className={s.DialogContent}>{calendar}</Popover.Content>
+                <Popover.Content className={s.DialogContent} sideOffset={10}>
+                  {calendar}
+                </Popover.Content>
               </Popover.Portal>
             </Popover.Root>
-          )}
+            <button className={s.btnTrash} onClick={() => handleDeleteTodolist(todo.id)} type={'button'}>
+              🗑️
+            </button>
+          </div>
         </div>
       ) : (
-        <div className={s.wrapper}>
+        <div className={s.commonWrapper}>
           <Input
             onChange={e => setNewTodoTitle(e.target.value)}
             placeholder={'Новое название'}
@@ -138,12 +146,7 @@ export const Title = ({ endDate, todo, withoutEditButtons }: TitleProps) => {
           <Button className={s.icon} onClick={handleReset} variant={'ghost'}>
             ❌
           </Button>
-          <Button
-            className={s.icon}
-            disabled={!newTodoTitle}
-            onClick={() => handleUpdateTodolistTitle(todo.id)}
-            variant={'ghost'}
-          >
+          <Button className={s.icon} disabled={!newTodoTitle} onClick={handleUpdateTodolistTitle} variant={'ghost'}>
             ✔️
           </Button>
         </div>

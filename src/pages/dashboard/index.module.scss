@@ -1,0 +1,53 @@
+.taskTimelineContainer {
+  user-select: none;
+  max-width: calc(100vw - 250px);
+  margin: 0 auto;
+}
+
+.taskTimeline {
+  overflow-x: auto;
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+
+  h3 {
+    margin-bottom: 3px;
+    font-size: 16px;
+    text-align: center;
+  }
+}
+
+.dateWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.taskDate {
+  width: 150px;
+  min-height: 50vh;
+  margin-bottom: 20px;
+  padding: 10px;
+
+  background-color: #dada26;
+  border-radius: 10px;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.taskItem {
+  padding: 10px;
+
+  background-color: #9d9898;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+
+  transition: background-color 0.2s;
+}
+
+.taskItem:hover {
+  background-color: #e0e0e0;
+}

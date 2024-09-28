@@ -1,21 +1,42 @@
-.wrapper {
+.commonWrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   min-width: 350px;
+  min-height: 40px;
+
+  button {
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .btnWrapper {
   display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
-.icon {
-  transition: transform 0.2s;
 
-  &:hover {
-    transform: scale(1.2);
-  }
+.btnCalendar, .btnTrash {
+  font-size: 20px;
+  background-color: transparent;
+  border: none;
 }
+
+
 
 
 

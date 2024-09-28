@@ -6,6 +6,7 @@ export type todolistServerType = {
   id: string
   order: number
   startDate: string
+  status: number
   textColor: string
   title: string
 }
