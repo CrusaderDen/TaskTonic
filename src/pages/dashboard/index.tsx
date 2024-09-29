@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { getSidebarLayout } from '@/layouts/sidebar-layout/sidebar-layout'
-import { useGetTodoListsQuery, useLazyGetTodoListsQuery } from '@/service/todolists/todolists-api'
+import { useGetTodoListsQuery, useUpdateTodolistMutation } from '@/service/todolists/todolists-api'
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
 
 import s from './index.module.scss'
@@ -50,18 +50,21 @@ const testTodo = [
 ]
 
 const addDateKey = (todos: any) => {
-  return todos.map((todo: any) => {
-    const date = todo.endDate.split('T')[0]
+  return todos
+    .filter((todo: any) => todo.endDate)
+    .map((todo: any) => {
+      const date = todo.endDate.split('T')[0]
 
-    return {
-      ...todo,
-      date: date,
-    }
-  })
+      return {
+        ...todo,
+        date: date,
+      }
+    })
 }
 
 function Planning() {
   const { data: todolists, isLoading: isTodoLoading } = useGetTodoListsQuery()
+  const [updateTodolist] = useUpdateTodolistMutation()
   const [tasks, setTasks] = useState([])
 
   // const [tasks, setTasks] = useState(testDates)
@@ -75,7 +78,7 @@ function Planning() {
   return (
     <div style={{ width: '5000px' }}>
       <h2 style={{ margin: '20px 0 20px 20px' }}>Таймлайн:</h2>
-      <TasksTimeline setTasks={setTasks} tasks={tasks} />
+      <TasksTimeline setTasks={setTasks} tasks={tasks} updateTodolist={updateTodolist} />
     </div>
   )
 }
@@ -84,7 +87,8 @@ Planning.getLayout = getSidebarLayout
 
 export default Planning
 
-const TasksTimeline = ({ setTasks, tasks }: any) => {
+const TasksTimeline = ({ setTasks, tasks, updateTodolist }: any) => {
+  const [groupedTasks, setGroupedTasks] = useState({})
   const generateDatesForNextMonth = () => {
     const dates = []
     const today = new Date()
@@ -103,19 +107,28 @@ const TasksTimeline = ({ setTasks, tasks }: any) => {
   const dates = generateDatesForNextMonth()
 
   // Группируем задачи каждый раз, когда tasks обновляется
-  const groupedTasks = tasks.reduce((acc: any, task: any) => {
-    const date = task.date
+  function groupedTasksFn(tasks: any) {
+    return tasks.reduce((acc: any, task: any) => {
+      const date = task.date
 
-    if (!acc[date]) {
-      acc[date] = []
-    }
-    acc[date].push(task)
+      if (!acc[date]) {
+        acc[date] = []
+      }
+      acc[date].push(task)
 
-    return acc
-  }, {})
+      return acc
+    }, {})
+  }
 
+  useEffect(() => {
+    setGroupedTasks(groupedTasksFn(tasks))
+  }, [tasks])
+
+  // @ts-ignore
   const onDragEnd = (result: any) => {
     const { destination, source } = result
+
+    console.log(result)
 
     if (!destination) {
       return
@@ -125,25 +138,53 @@ const TasksTimeline = ({ setTasks, tasks }: any) => {
     const destinationDate = destination.droppableId
     const taskId = result.draggableId
 
-    const taskToMove = tasks.find((task: any) => task.id === taskId)
-
     if (sourceDate === destinationDate) {
-      const [removed] = tasks.splice(source.index, 1)
+      // @ts-ignore
+      const currentTasks = structuredClone(groupedTasks[sourceDate])
+      const [removed] = currentTasks.splice(source.index, 1)
 
-      console.log(source.index)
-      const newTasks = [...tasks]
+      currentTasks.splice(destination.index, 0, removed)
+      setGroupedTasks({ ...groupedTasks, [sourceDate]: currentTasks })
 
-      newTasks.splice(destination.index, 0, removed)
-      setTasks(newTasks)
+      const todoForUpdate = tasks.find((task: any) => task.id === taskId)
+
+      updateTodolist({
+        ...todoForUpdate,
+        endDate: `${destinationDate}T11:29:05.350202+03:00`,
+        order: destination.index,
+      })
 
       return
     }
 
-    const updatedSourceTasks = tasks.filter((task: any) => task.id !== taskId)
-    const updatedDestinationTasks = { ...taskToMove, date: destinationDate }
-    const newArr = [...updatedSourceTasks, updatedDestinationTasks]
+    if (!Object.keys(groupedTasks).includes(destinationDate)) {
+      //@ts-ignore
+      const sourceTasks = structuredClone(groupedTasks[sourceDate])
+      const updatedSourceTasks = sourceTasks.splice(source.index, 1)
 
-    setTasks(newArr)
+      setGroupedTasks({ ...groupedTasks, [destinationDate]: updatedSourceTasks, [sourceDate]: sourceTasks })
+      const todoForUpdate = tasks.find((task: any) => task.id === taskId)
+
+      updateTodolist({
+        ...todoForUpdate,
+        endDate: `${destinationDate}T11:29:05.350202+03:00`,
+        order: destination.index,
+      })
+
+      return
+    }
+
+    // @ts-ignore
+    const sourceTasks = structuredClone(groupedTasks[sourceDate])
+    const [updatedSourceTasks] = sourceTasks.splice(source.index, 1)
+    // @ts-ignore
+    const destinationTasks = structuredClone(groupedTasks[destinationDate])
+
+    destinationTasks.splice(destination.index, 0, updatedSourceTasks)
+    setGroupedTasks({ ...groupedTasks, [destinationDate]: destinationTasks, [sourceDate]: sourceTasks })
+    const todoForUpdate = tasks.find((task: any) => task.id === taskId)
+
+    updateTodolist({ ...todoForUpdate, endDate: `${destinationDate}T11:29:05.350202+03:00`, order: destination.index })
   }
 
   return (
@@ -168,9 +209,11 @@ const TimelineDate = ({ date, groupedTasks }: any) => {
           <div className={s.taskDate}>
             <div className={s.taskList}>
               {groupedTasks[date] ? (
-                groupedTasks[date].map((task: any, index: number) => (
-                  <TimelineTodo index={index} key={task.id.toString()} task={task} />
-                ))
+                groupedTasks[date]
+                  .sort((a: any, b: any) => a.order - b.order)
+                  .map((task: any, index: number) => (
+                    <TimelineTodo index={index} key={task.id.toString()} task={task} />
+                  ))
               ) : (
                 <div></div>
               )}
