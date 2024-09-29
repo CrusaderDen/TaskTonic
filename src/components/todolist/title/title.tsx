@@ -32,6 +32,10 @@ export const Title = ({ addCalendar, endDate, todo }: TitleProps) => {
   }, [newTodoTitle, todo, updateTodolist])
 
   const handleDeleteTodolist = async (id: string) => {
+    if (!confirm('Удалить задачу?')) {
+      return
+    }
+
     await deleteTodolist(id).unwrap()
   }
 

@@ -29,7 +29,6 @@ function Todolists() {
         return
     }
 
-    console.log(data)
     await updateTodolist(data).unwrap()
   }
 

@@ -3,6 +3,7 @@ import { PropsWithChildren, ReactElement, useEffect, useState } from 'react'
 import { Loader } from '@/components/loader/loader'
 import { useLogoutMutation } from '@/service/auth/auth-api'
 import { Button } from '@/shared/lib/ui/button/button'
+import { clsx } from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTheme } from 'next-themes'
@@ -36,13 +37,19 @@ export const SidebarLayout = ({ children }: PropsWithChildren) => {
         <aside className={s.aside}>
           <nav className={s.navbar}>
             <ul className={s.navList}>
-              <li>
-                <Link className={router.pathname === '/editor' ? s.linkActive : ''} href={'/editor'}>
+              <li className={router.pathname === '/editor' ? clsx(s.listItemActive, s.listItem) : s.listItem}>
+                <Link
+                  className={router.pathname === '/editor' ? clsx(s.linkActive, s.linkBtn) : s.linkBtn}
+                  href={'/editor'}
+                >
                   Редактор задач
                 </Link>
               </li>
-              <li>
-                <Link className={router.pathname === '/dashboard' ? s.linkActive : ''} href={'/dashboard'}>
+              <li className={router.pathname === '/dashboard' ? clsx(s.listItemActive, s.listItem) : s.listItem}>
+                <Link
+                  className={router.pathname === '/dashboard' ? clsx(s.linkActive, s.linkBtn) : s.linkBtn}
+                  href={'/dashboard'}
+                >
                   Дашборд
                 </Link>
               </li>

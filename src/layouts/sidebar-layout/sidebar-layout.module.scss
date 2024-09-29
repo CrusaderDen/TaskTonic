@@ -54,5 +54,31 @@
 }
 
 .linkActive {
-  font-weight: 700;
+  transform: scale(1.2);
+
+}
+
+.linkBtn {
+  padding: 15px 0;
+}
+
+.listItem {
+  position: relative;
+  margin-left: 10px;
+  list-style: none;
+
+}
+
+.listItemActive {
+  &::before {
+    content: '➤';
+
+    position: absolute;
+    top: 50%;
+    left: -25px;
+    transform: translateY(-50%);
+
+    line-height: 0;
+
+  }
 }

@@ -12,7 +12,7 @@ type GroupedTasks = {
 
 const addDateKey = (todos: any) => {
   return todos
-    .filter((todo: any) => todo.endDate)
+    .filter((todo: any) => todo.endDate && todo.status !== 1)
     .map((todo: any) => {
       const date = todo.endDate.split('T')[0]
 
@@ -95,12 +95,10 @@ const TasksTimeline = ({ setTasks, tasks, updateTodolist }: any) => {
     const sourceDate = source.droppableId
     const destinationDate = destination.droppableId
     const taskId = result.draggableId
+    const sourceTasks = groupedTasks[sourceDate]
 
     //вариант, когда перемещение в одной дате
     if (sourceDate === destinationDate) {
-      const sourceTasks = structuredClone(groupedTasks[sourceDate])
-
-      console.log('Case 1')
       const [removed] = sourceTasks.splice(source.index, 1)
 
       sourceTasks.splice(destination.index, 0, removed)
@@ -120,9 +118,6 @@ const TasksTimeline = ({ setTasks, tasks, updateTodolist }: any) => {
 
     //вариант, когда перемещение в дату, где еще не было создано задач
     if (!Object.keys(groupedTasks).includes(destinationDate)) {
-      const sourceTasks = structuredClone(groupedTasks[sourceDate])
-
-      console.log('Case 2')
       const updatedSourceTasks = sourceTasks.splice(source.index, 1)
 
       setGroupedTasks({ ...groupedTasks, [destinationDate]: updatedSourceTasks, [sourceDate]: sourceTasks })
@@ -138,28 +133,24 @@ const TasksTimeline = ({ setTasks, tasks, updateTodolist }: any) => {
     }
 
     //вариант, когда перемещение из одной даты в другую, где уже были задачи
-    const sourceTasks = structuredClone(groupedTasks[sourceDate])
-
-    console.log('Case 3')
     const [removed] = sourceTasks.splice(source.index, 1)
     const destinationTasks = groupedTasks[destinationDate]
 
     destinationTasks.splice(destination.index, 0, removed)
     const updatedDestinationTasks = destinationTasks.map((task: any, index: any) => ({
       ...task,
+      endDate: `${destinationDate}T11:29:05.350202+03:00`,
       order: index,
     }))
 
     setGroupedTasks({ ...groupedTasks, [destinationDate]: updatedDestinationTasks, [sourceDate]: sourceTasks })
-    // console.log(updatedDestinationTasks)
-    // console.log(sourceTasks)
-    // updatedDestinationTasks.forEach((task: any) => {
-    //   console.log(task)
-    //   updateTodolist(task)
-    // })
-    // sourceTasks.forEach((task: any) => {
-    //   updateTodolist(task)
-    // })
+
+    updatedDestinationTasks.forEach((task: any) => {
+      updateTodolist(task)
+    })
+    sourceTasks.forEach((task: any) => {
+      updateTodolist(task)
+    })
   }
 
   return (
