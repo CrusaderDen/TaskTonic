@@ -23,8 +23,9 @@ const addDateKey = (todos: any) => {
     })
 }
 
+
 function Planning() {
-  const { data: todolists, isLoading: isTodoLoading } = useGetTodoListsQuery()
+  const { data: todolists } = useGetTodoListsQuery()
   const [updateTodolist] = useUpdateTodolistMutation()
   const [tasks, setTasks] = useState([])
 
@@ -48,7 +49,7 @@ Planning.getLayout = getSidebarLayout
 
 export default Planning
 
-const TasksTimeline = ({ setTasks, tasks, updateTodolist }: any) => {
+const TasksTimeline = ({ tasks, updateTodolist }: any) => {
   const [groupedTasks, setGroupedTasks] = useState<GroupedTasks>({})
   const generateDatesForNextMonth = () => {
     const dates = []
