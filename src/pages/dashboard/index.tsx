@@ -6,48 +6,9 @@ import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
 
 import s from './index.module.scss'
 
-const testDates = [
-  { date: '2024-09-27', id: 1, title: 'Задача 1' },
-  { date: '2024-09-27', id: 2, title: 'Задача 2' },
-  { date: '2024-09-30', id: 3, title: 'Задача 3' },
-  { date: '2024-09-30', id: 4, title: 'Задача 4' },
-]
-
-const testTodo = [
-  {
-    addedDate: '2024-09-27T22:05:43.736615+03:00',
-    backgroundColor: '',
-    endDate: '2024-09-29T15:40:27+03:00',
-    id: '3dbba419-9d39-467a-82be-fa6700ebb801',
-    order: 0,
-    startDate: null,
-    status: 1,
-    textColor: '',
-    title: 'Сгонять на дачу, слить воду',
-  },
-  {
-    addedDate: '2024-09-27T11:50:40.756878+03:00',
-    backgroundColor: '',
-    endDate: '2024-10-11T11:50:41+03:00',
-    id: '0a606a95-116f-4782-b13e-31829f4a01d6',
-    order: 0,
-    startDate: null,
-    status: 0,
-    textColor: '',
-    title: 'Стать сеньером',
-  },
-  {
-    addedDate: '2024-09-26T19:56:49.044365+03:00',
-    backgroundColor: '',
-    endDate: '2024-09-27T11:58:19+03:00',
-    id: 'ef9df42c-b916-4b9d-a2d5-d56e59ecd2f5',
-    order: 0,
-    startDate: null,
-    status: 0,
-    textColor: '',
-    title: 'Сделать понтовый селектор',
-  },
-]
+type GroupedTasks = {
+  [key: string]: []
+}
 
 const addDateKey = (todos: any) => {
   return todos
@@ -88,7 +49,7 @@ Planning.getLayout = getSidebarLayout
 export default Planning
 
 const TasksTimeline = ({ setTasks, tasks, updateTodolist }: any) => {
-  const [groupedTasks, setGroupedTasks] = useState({})
+  const [groupedTasks, setGroupedTasks] = useState<GroupedTasks>({})
   const generateDatesForNextMonth = () => {
     const dates = []
     const today = new Date()
@@ -124,11 +85,8 @@ const TasksTimeline = ({ setTasks, tasks, updateTodolist }: any) => {
     setGroupedTasks(groupedTasksFn(tasks))
   }, [tasks])
 
-  // @ts-ignore
   const onDragEnd = (result: any) => {
     const { destination, source } = result
-
-    console.log(result)
 
     if (!destination) {
       return
@@ -138,28 +96,33 @@ const TasksTimeline = ({ setTasks, tasks, updateTodolist }: any) => {
     const destinationDate = destination.droppableId
     const taskId = result.draggableId
 
+    //вариант, когда перемещение в одной дате
     if (sourceDate === destinationDate) {
-      // @ts-ignore
-      const currentTasks = structuredClone(groupedTasks[sourceDate])
-      const [removed] = currentTasks.splice(source.index, 1)
+      const sourceTasks = structuredClone(groupedTasks[sourceDate])
 
-      currentTasks.splice(destination.index, 0, removed)
-      setGroupedTasks({ ...groupedTasks, [sourceDate]: currentTasks })
+      console.log('Case 1')
+      const [removed] = sourceTasks.splice(source.index, 1)
 
-      const todoForUpdate = tasks.find((task: any) => task.id === taskId)
+      sourceTasks.splice(destination.index, 0, removed)
+      const updatedTasks = sourceTasks.map((task: any, index: any) => ({
+        ...task,
+        order: index,
+      }))
 
-      updateTodolist({
-        ...todoForUpdate,
-        endDate: `${destinationDate}T11:29:05.350202+03:00`,
-        order: destination.index,
+      setGroupedTasks({ ...groupedTasks, [sourceDate]: updatedTasks })
+
+      updatedTasks.forEach((task: any) => {
+        updateTodolist(task)
       })
 
       return
     }
 
+    //вариант, когда перемещение в дату, где еще не было создано задач
     if (!Object.keys(groupedTasks).includes(destinationDate)) {
-      //@ts-ignore
       const sourceTasks = structuredClone(groupedTasks[sourceDate])
+
+      console.log('Case 2')
       const updatedSourceTasks = sourceTasks.splice(source.index, 1)
 
       setGroupedTasks({ ...groupedTasks, [destinationDate]: updatedSourceTasks, [sourceDate]: sourceTasks })
@@ -174,17 +137,29 @@ const TasksTimeline = ({ setTasks, tasks, updateTodolist }: any) => {
       return
     }
 
-    // @ts-ignore
+    //вариант, когда перемещение из одной даты в другую, где уже были задачи
     const sourceTasks = structuredClone(groupedTasks[sourceDate])
-    const [updatedSourceTasks] = sourceTasks.splice(source.index, 1)
-    // @ts-ignore
-    const destinationTasks = structuredClone(groupedTasks[destinationDate])
 
-    destinationTasks.splice(destination.index, 0, updatedSourceTasks)
-    setGroupedTasks({ ...groupedTasks, [destinationDate]: destinationTasks, [sourceDate]: sourceTasks })
-    const todoForUpdate = tasks.find((task: any) => task.id === taskId)
+    console.log('Case 3')
+    const [removed] = sourceTasks.splice(source.index, 1)
+    const destinationTasks = groupedTasks[destinationDate]
 
-    updateTodolist({ ...todoForUpdate, endDate: `${destinationDate}T11:29:05.350202+03:00`, order: destination.index })
+    destinationTasks.splice(destination.index, 0, removed)
+    const updatedDestinationTasks = destinationTasks.map((task: any, index: any) => ({
+      ...task,
+      order: index,
+    }))
+
+    setGroupedTasks({ ...groupedTasks, [destinationDate]: updatedDestinationTasks, [sourceDate]: sourceTasks })
+    // console.log(updatedDestinationTasks)
+    // console.log(sourceTasks)
+    // updatedDestinationTasks.forEach((task: any) => {
+    //   console.log(task)
+    //   updateTodolist(task)
+    // })
+    // sourceTasks.forEach((task: any) => {
+    //   updateTodolist(task)
+    // })
   }
 
   return (
