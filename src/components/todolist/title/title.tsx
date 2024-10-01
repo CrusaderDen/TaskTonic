@@ -16,7 +16,7 @@ type TitleProps = {
   todo: todolistServerType
 }
 export const Title = ({ addCalendar, endDate, todo }: TitleProps) => {
-  const [newTodoTitle, setNewTodoTitle] = useState('')
+  const [newTodoTitle, setNewTodoTitle] = useState(todo ? todo.title : '')
   const [editMode, setEditMode] = useState(false)
   const [showCalendar, setShowCalendar] = useState(false)
   const [startDate, setStartDate] = useState(todo.endDate ? new Date(todo.endDate) : new Date())
@@ -27,7 +27,6 @@ export const Title = ({ addCalendar, endDate, todo }: TitleProps) => {
     const data = { ...todo, title: newTodoTitle }
 
     await updateTodolist(data).unwrap()
-    setNewTodoTitle('')
     setEditMode(false)
   }, [newTodoTitle, todo, updateTodolist])
 
@@ -97,7 +96,7 @@ export const Title = ({ addCalendar, endDate, todo }: TitleProps) => {
         // timeFormat={'HH:mm'}
         // timeIntervals={15}
       />
-      <Button fullWidth onClick={() => handleDate(startDate)}>
+      <Button fullWidth onClick={() => handleDate(startDate)} style={{ position: 'relative', top: '-5px' }}>
         Подтвердить время
       </Button>
     </div>
@@ -145,9 +144,10 @@ export const Title = ({ addCalendar, endDate, todo }: TitleProps) => {
           <Input
             onChange={e => setNewTodoTitle(e.target.value)}
             placeholder={'Новое название'}
+            style={{ width: `${todo.title.length + 1}ch` }}
             value={newTodoTitle}
           ></Input>
-          <Button className={s.icon} onClick={handleReset} variant={'ghost'}>
+          <Button className={s.icon} onClick={() => setEditMode(false)} variant={'ghost'}>
             ❌
           </Button>
           <Button className={s.icon} disabled={!newTodoTitle} onClick={handleUpdateTodolistTitle} variant={'ghost'}>
