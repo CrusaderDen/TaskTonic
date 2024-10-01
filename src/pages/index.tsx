@@ -33,7 +33,7 @@ export default function Home() {
         <main className={styles.main}>
           <div className={s.titleWrapper}>
             <div className={s.title}>Welcome to Task Tonic!</div>
-            <div>It&apos;s the app to help you plan.</div>
+            <div>It&apos;s the app for planning your activities.</div>
             <div className={s.btnWrapper}>
               <Button onClick={() => router.push('registration')} variant={'secondary'}>
                 Go to the Registration page

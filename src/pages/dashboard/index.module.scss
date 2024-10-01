@@ -1,3 +1,7 @@
+.timeLineWrapper {
+  overflow-x: auto;
+}
+
 .taskTimelineContainer {
   user-select: none;
   max-width: calc(100vw - 250px);
@@ -5,7 +9,6 @@
 }
 
 .taskTimeline {
-  overflow-x: auto;
   display: flex;
   gap: 10px;
   padding: 20px;
@@ -23,7 +26,7 @@
 }
 
 .taskDate {
-  width: 150px;
+  width: 250px;
   min-height: 50vh;
   margin-bottom: 20px;
   padding: 10px;

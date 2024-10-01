@@ -50,7 +50,16 @@ export const SidebarLayout = ({ children }: PropsWithChildren) => {
                   className={router.pathname === '/dashboard' ? clsx(s.linkActive, s.linkBtn) : s.linkBtn}
                   href={'/dashboard'}
                 >
-                  Дашборд
+                  Доска задач
+                </Link>
+              </li>
+              <li className={router.pathname === '/completed' ? clsx(s.listItemActive, s.listItem) : s.listItem}>
+                <Link
+                  className={router.pathname === '/completed' ? clsx(s.linkActive, s.linkBtn) : s.linkBtn}
+                  href={'/completed'}
+                >
+                  Выполненные <br />
+                  задачи
                 </Link>
               </li>
             </ul>

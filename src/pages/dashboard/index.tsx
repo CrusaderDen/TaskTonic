@@ -36,10 +36,39 @@ function Planning() {
     }
   }, [todolists])
 
+  //horizontal wheel event
+  const handleWheel = (event: WheelEvent) => {
+    event.preventDefault()
+    const scrollAmount = event.deltaY
+    const container = document.querySelector(`.${s.timeLineWrapper}`)
+
+    if (container) {
+      container.scrollLeft += scrollAmount // Изменяем горизонтальную прокрутку
+    }
+  }
+
+  useEffect(() => {
+    const container = document.querySelector(`.${s.timeLineWrapper}`)
+
+    if (container) {
+      container.addEventListener('wheel', handleWheel as any)
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('wheel', handleWheel as any)
+      }
+    }
+  }, [])
+
+  //-----
+
   return (
-    <div style={{ width: '5000px' }}>
-      <h2 style={{ margin: '20px 0 20px 20px' }}>Таймлайн:</h2>
-      <TasksTimeline setTasks={setTasks} tasks={tasks} updateTodolist={updateTodolist} />
+    <div>
+      <h2 style={{ margin: '20px 0 20px 20px' }}>Задачи по датам:</h2>
+      <div className={s.timeLineWrapper}>
+        <TasksTimeline setTasks={setTasks} tasks={tasks} updateTodolist={updateTodolist} />
+      </div>
     </div>
   )
 }
@@ -50,6 +79,7 @@ export default Planning
 
 const TasksTimeline = ({ tasks, updateTodolist }: any) => {
   const [groupedTasks, setGroupedTasks] = useState<GroupedTasks>({})
+
   const generateDatesForNextMonth = () => {
     const dates = []
     const today = new Date()

@@ -17,7 +17,6 @@ function Todolists() {
   const handleUpdateTodolistStatus = async (todo: any) => {
     let data
 
-    console.log(todo)
     switch (todo.status) {
       case 0:
         data = { ...todo, status: 1 }
@@ -68,19 +67,6 @@ function Todolists() {
                 <Todolist endDate={formattedDate} todo={todo} />
                 <span>{formattedDate}</span>
                 <Button onClick={() => handleUpdateTodolistStatus(todo)}>Сделал!</Button>
-              </div>
-            )
-          })}
-      </div>
-      <h2 style={{ margin: '20px 0 20px 20px' }}>Выполненные задачи:</h2>
-      <div className={clsx(s.todolists)}>
-        {todolists
-          ?.filter(todo => todo.status === 1)
-          .map(todo => {
-            return (
-              <div key={todo.id} style={{ alignItems: 'center', display: 'flex', gap: '20px' }}>
-                <Todolist key={todo.id} todo={todo} />
-                <Button onClick={() => handleUpdateTodolistStatus(todo)}>Не сделал!</Button>
               </div>
             )
           })}
