@@ -1,3 +1,28 @@
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+
+  padding: 20px 40px;
+
+  background-color: rgb(0 0 0 / 58%);
+  border-radius: 20px;
+  box-shadow: 5px 5px 15px rgb(0 0 0 / 50%), -5px -5px 15px rgb(0 0 0 / 50%);
+}
+
+.btnWrapper {
+  display: flex;
+  gap: 15px;
+
+  button {
+    display: flex;
+    justify-content: center;
+    width: 250px;
+    box-shadow: 2px 2px 3px black;
+  }
+}
+
 .title {
   font-size: 34px;
   font-weight: 500;

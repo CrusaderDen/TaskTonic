@@ -23,7 +23,6 @@ const addDateKey = (todos: any) => {
     })
 }
 
-
 function Planning() {
   const { data: todolists } = useGetTodoListsQuery()
   const [updateTodolist] = useUpdateTodolistMutation()
@@ -61,6 +60,12 @@ const TasksTimeline = ({ tasks, updateTodolist }: any) => {
       const date = new Date(year, month, today.getDate() + i)
 
       dates.push(date.toISOString().split('T')[0])
+      // const day = date.getDate()
+      // const monthNames = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']
+      // const monthName = monthNames[date.getMonth()]
+      // const formattedDate = `${day} ${monthName}`
+      //
+      // dates.push(formattedDate)
     }
 
     return dates

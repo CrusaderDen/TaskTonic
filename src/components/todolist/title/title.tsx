@@ -52,7 +52,7 @@ export const Title = ({ addCalendar, endDate, todo }: TitleProps) => {
         void handleUpdateTodolistTitle()
       }
     },
-    [editMode, handleReset, handleUpdateTodolistTitle, todo.id]
+    [editMode, handleReset, handleUpdateTodolistTitle]
   )
 
   const openCalendar = () => {
