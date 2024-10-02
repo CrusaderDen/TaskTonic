@@ -11,11 +11,10 @@ import { startOfToday, subDays } from 'date-fns'
 import s from './title.module.scss'
 
 type TitleProps = {
-  endDate?: string
   hideCalendar?: true
   todo: todolistServerType
 }
-export const Title = ({ endDate, hideCalendar, todo }: TitleProps) => {
+export const Title = ({ hideCalendar, todo }: TitleProps) => {
   const [newTodoTitle, setNewTodoTitle] = useState(todo ? todo.title : '')
   const [editMode, setEditMode] = useState(false)
   const [showCalendar, setShowCalendar] = useState(false)
