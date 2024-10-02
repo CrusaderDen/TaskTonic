@@ -35,6 +35,10 @@
   border-radius: 10px;
 }
 
+.taskDateYesterday {
+  background-color: rgb(159 159 111 / 80%);
+}
+
 .taskList {
   display: flex;
   flex-direction: column;

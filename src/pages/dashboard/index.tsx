@@ -2,12 +2,27 @@ import { useEffect, useState } from 'react'
 
 import { getSidebarLayout } from '@/layouts/sidebar-layout/sidebar-layout'
 import { useGetTodoListsQuery, useUpdateTodolistMutation } from '@/service/todolists/todolists-api'
+import { dateFormatter } from '@/shared/utils/dateFormatter'
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
+import { clsx } from 'clsx'
 
 import s from './index.module.scss'
 
 type GroupedTasks = {
   [key: string]: []
+}
+
+const generateDatesForNextMonth = () => {
+  const dates = []
+  const today = new Date()
+  const month = today.getMonth()
+  const year = today.getFullYear()
+
+  for (let i = 0; i < 30; i++) {
+    dates.push(new Date(year, month, today.getDate() + i).toISOString().split('T')[0])
+  }
+
+  return dates
 }
 
 const addDateKey = (todos: any) => {
@@ -28,8 +43,6 @@ function Planning() {
   const [updateTodolist] = useUpdateTodolistMutation()
   const [tasks, setTasks] = useState([])
 
-  // const [tasks, setTasks] = useState(testDates)
-
   useEffect(() => {
     if (todolists) {
       setTasks(addDateKey(todolists))
@@ -43,7 +56,7 @@ function Planning() {
     const container = document.querySelector(`.${s.timeLineWrapper}`)
 
     if (container) {
-      container.scrollLeft += scrollAmount // Изменяем горизонтальную прокрутку
+      container.scrollLeft += scrollAmount
     }
   }
 
@@ -80,30 +93,8 @@ export default Planning
 const TasksTimeline = ({ tasks, updateTodolist }: any) => {
   const [groupedTasks, setGroupedTasks] = useState<GroupedTasks>({})
 
-  const generateDatesForNextMonth = () => {
-    const dates = []
-    const today = new Date()
-    const month = today.getMonth()
-    const year = today.getFullYear()
-
-    for (let i = 0; i < 30; i++) {
-      const date = new Date(year, month, today.getDate() + i)
-
-      dates.push(date.toISOString().split('T')[0])
-      // const day = date.getDate()
-      // const monthNames = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']
-      // const monthName = monthNames[date.getMonth()]
-      // const formattedDate = `${day} ${monthName}`
-      //
-      // dates.push(formattedDate)
-    }
-
-    return dates
-  }
-
   const dates = generateDatesForNextMonth()
 
-  // Группируем задачи каждый раз, когда tasks обновляется
   function groupedTasksFn(tasks: any) {
     return tasks.reduce((acc: any, task: any) => {
       const date = task.date
@@ -193,8 +184,8 @@ const TasksTimeline = ({ tasks, updateTodolist }: any) => {
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={s.taskTimelineContainer}>
         <div className={s.taskTimeline}>
-          {dates.map(date => (
-            <TimelineDate date={date} groupedTasks={groupedTasks} key={date} />
+          {dates.map((date, datesIndex) => (
+            <TimelineDate date={date} datesIndex={datesIndex} groupedTasks={groupedTasks} key={date} />
           ))}
         </div>
       </div>
@@ -202,13 +193,15 @@ const TasksTimeline = ({ tasks, updateTodolist }: any) => {
   )
 }
 
-const TimelineDate = ({ date, groupedTasks }: any) => {
+const TimelineDate = ({ date, datesIndex, groupedTasks }: any) => {
+  const yesterday = datesIndex === 0
+
   return (
     <Droppable droppableId={date}>
       {provided => (
         <div className={s.dateWrapper} ref={provided.innerRef} {...provided.droppableProps}>
-          <h3>{date}</h3>
-          <div className={s.taskDate}>
+          <h3>{yesterday ? `${dateFormatter(date)} (вчера)` : dateFormatter(date)}</h3>
+          <div className={yesterday ? clsx(s.taskDate, s.taskDateYesterday) : s.taskDate}>
             <div className={s.taskList}>
               {groupedTasks[date] ? (
                 groupedTasks[date]
