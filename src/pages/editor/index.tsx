@@ -6,6 +6,7 @@ import { Todolist } from '@/components/todolist/todolist'
 import { getSidebarLayout } from '@/layouts/sidebar-layout/sidebar-layout'
 import { useGetTodoListsQuery, useUpdateTodolistMutation } from '@/service/todolists/todolists-api'
 import { Button } from '@/shared/lib/ui/button/button'
+import { dateFormatter } from '@/shared/utils/dateFormatter'
 import { clsx } from 'clsx'
 import { format, parseISO } from 'date-fns'
 
@@ -15,6 +16,10 @@ function Todolists() {
   const { data: todolists, isLoading: isTodoLoading } = useGetTodoListsQuery()
   const [updateTodolist] = useUpdateTodolistMutation()
   const handleUpdateTodolistStatus = async (todo: any) => {
+    if (!confirm('Отметить задачу как выполненную?')) {
+      return
+    }
+
     let data
 
     switch (todo.status) {
@@ -37,13 +42,13 @@ function Todolists() {
       <div className={s.createTodoWrapper}>
         <CreateTodolist />
       </div>
-      <h2 style={{ margin: '20px 0 20px 20px' }}>Новые задачи:</h2>
+      <h2 style={{ margin: '50px 0 20px 20px' }}>Новые задачи:</h2>
       <div className={s.todolists}>
         {todolists
           ?.filter(todo => !todo.endDate && todo.status === 0)
           .map(todo => <Todolist key={todo.id} todo={todo} />)}
       </div>
-      <h2 style={{ margin: '20px 0 20px 20px' }}>Запланированные задачи (по срочности):</h2>
+      <h2 style={{ margin: '50px 0 20px 20px' }}>Запланированные задачи (по срочности):</h2>
       <div className={clsx(s.todolists, s.todolistsPlanned)}>
         {todolists
           ?.filter(todo => todo.endDate && todo.status === 0)
@@ -65,8 +70,10 @@ function Todolists() {
             return (
               <div key={todo.id} style={{ alignItems: 'center', display: 'flex', gap: '20px' }}>
                 <Todolist endDate={formattedDate} todo={todo} />
-                <span>{formattedDate}</span>
-                <Button onClick={() => handleUpdateTodolistStatus(todo)}>Сделал!</Button>
+                <span style={{ padding: '0 15px' }}>{dateFormatter(todo.endDate)}</span>
+                <Button onClick={() => handleUpdateTodolistStatus(todo)} variant={'secondary'}>
+                  В выполненные
+                </Button>
               </div>
             )
           })}

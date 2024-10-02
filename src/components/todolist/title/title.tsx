@@ -11,11 +11,11 @@ import { startOfToday, subDays } from 'date-fns'
 import s from './title.module.scss'
 
 type TitleProps = {
-  addCalendar?: true
   endDate?: string
+  hideCalendar?: true
   todo: todolistServerType
 }
-export const Title = ({ addCalendar, endDate, todo }: TitleProps) => {
+export const Title = ({ endDate, hideCalendar, todo }: TitleProps) => {
   const [newTodoTitle, setNewTodoTitle] = useState(todo ? todo.title : '')
   const [editMode, setEditMode] = useState(false)
   const [showCalendar, setShowCalendar] = useState(false)
@@ -118,22 +118,24 @@ export const Title = ({ addCalendar, endDate, todo }: TitleProps) => {
             </Button>
           </div>
           <div className={s.btnWrapper}>
-            <Popover.Root onOpenChange={() => setShowCalendar(!showCalendar)} open={showCalendar}>
-              <Popover.Anchor asChild>
-                <div>
-                  <Popover.Trigger asChild>
-                    <button className={s.btnCalendar} onClick={openCalendar} type={'button'}>
-                      📅
-                    </button>
-                  </Popover.Trigger>
-                </div>
-              </Popover.Anchor>
-              <Popover.Portal>
-                <Popover.Content className={s.DialogContent} sideOffset={10}>
-                  {calendar}
-                </Popover.Content>
-              </Popover.Portal>
-            </Popover.Root>
+            {!hideCalendar && (
+              <Popover.Root onOpenChange={() => setShowCalendar(!showCalendar)} open={showCalendar}>
+                <Popover.Anchor asChild>
+                  <div>
+                    <Popover.Trigger asChild>
+                      <button className={s.btnCalendar} onClick={openCalendar} type={'button'}>
+                        📅
+                      </button>
+                    </Popover.Trigger>
+                  </div>
+                </Popover.Anchor>
+                <Popover.Portal>
+                  <Popover.Content className={s.DialogContent} sideOffset={10}>
+                    {calendar}
+                  </Popover.Content>
+                </Popover.Portal>
+              </Popover.Root>
+            )}
             <button className={s.btnTrash} onClick={() => handleDeleteTodolist(todo.id)} type={'button'}>
               🗑️
             </button>
@@ -147,12 +149,14 @@ export const Title = ({ addCalendar, endDate, todo }: TitleProps) => {
             style={{ width: `${todo.title.length + 1}ch` }}
             value={newTodoTitle}
           ></Input>
-          <Button className={s.icon} onClick={() => setEditMode(false)} variant={'ghost'}>
-            ❌
-          </Button>
-          <Button className={s.icon} disabled={!newTodoTitle} onClick={handleUpdateTodolistTitle} variant={'ghost'}>
-            ✔️
-          </Button>
+          <div style={{ alignItems: 'center', display: 'flex', justifyContent: 'flex-end' }}>
+            <Button className={s.icon} onClick={() => setEditMode(false)} variant={'ghost'}>
+              ❌
+            </Button>
+            <Button className={s.icon} disabled={!newTodoTitle} onClick={handleUpdateTodolistTitle} variant={'ghost'}>
+              ✔️
+            </Button>
+          </div>
         </div>
       )}
     </div>
