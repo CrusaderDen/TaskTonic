@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { TasksTimeline } from '@/components/date-line/date-line'
+import { DatesLine } from '@/components/dates-line/dates-line'
 import { getSidebarLayout } from '@/layouts/sidebar-layout/sidebar-layout'
 import { useGetTodoListsQuery, useUpdateTodolistMutation } from '@/service/todolists/todolists-api'
 
@@ -33,7 +33,7 @@ function TasksBoard() {
   return (
     <div>
       <h2 className={s.title}>Задачи по датам:</h2>
-      <TasksTimeline setTasks={setTasks} tasks={tasks} updateTodolist={updateTodolist} />
+      <DatesLine setTasks={setTasks} tasks={tasks} updateTodolist={updateTodolist} />
     </div>
   )
 }

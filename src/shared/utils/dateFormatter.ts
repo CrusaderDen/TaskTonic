@@ -1,4 +1,4 @@
-//server date format - '2024-10-01T15:29:53.815+03:00'
+//server dates-line-date format - '2024-10-01T15:29:53.815+03:00'
 export const dateFormatter = (date: null | string) => {
   if (date == null) {
     return ''

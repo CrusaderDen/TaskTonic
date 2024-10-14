@@ -1,0 +1,24 @@
+.dateWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.taskDate {
+  width: 250px;
+  min-height: 50vh;
+  margin-bottom: 20px;
+  padding: 10px;
+
+  background-color: rgb(218 218 38 / 80%);
+  border-radius: 10px;
+}
+
+.taskDateYesterday {
+  background-color: rgb(159 159 111 / 80%);
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
