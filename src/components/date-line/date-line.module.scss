@@ -1,16 +1,12 @@
-.timeLineWrapper {
-  overflow-x: auto;
-}
-
 .taskTimelineContainer {
   user-select: none;
-  max-width: calc(100vw - 250px);
-  margin: 0 auto;
-}
 
-.taskTimeline {
+  overflow-x: auto;
   display: flex;
   gap: 10px;
+
+  max-width: calc(100vw - 250px);
+  margin: 0 auto;
   padding: 20px;
 
   h3 {

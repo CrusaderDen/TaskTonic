@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
 
-import { getSidebarLayout } from '@/layouts/sidebar-layout/sidebar-layout'
-import { useGetTodoListsQuery, useUpdateTodolistMutation } from '@/service/todolists/todolists-api'
 import { dateFormatter } from '@/shared/utils/dateFormatter'
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
 import { clsx } from 'clsx'
 
-import s from './dashboard.module.scss'
+import s from './date-line.module.scss'
 
 type GroupedTasks = {
   [key: string]: []
@@ -25,72 +23,7 @@ const generateDatesForNextMonth = () => {
   return dates
 }
 
-const addDateKey = (todos: any) => {
-  return todos
-    .filter((todo: any) => todo.endDate && todo.status !== 1)
-    .map((todo: any) => {
-      const date = todo.endDate.split('T')[0]
-
-      return {
-        ...todo,
-        date: date,
-      }
-    })
-}
-
-function Planning() {
-  const { data: todolists } = useGetTodoListsQuery()
-  const [updateTodolist] = useUpdateTodolistMutation()
-  const [tasks, setTasks] = useState([])
-
-  useEffect(() => {
-    if (todolists) {
-      setTasks(addDateKey(todolists))
-    }
-  }, [todolists])
-
-  //horizontal wheel event
-  const handleWheel = (event: WheelEvent) => {
-    event.preventDefault()
-    const scrollAmount = event.deltaY
-    const container = document.querySelector(`.${s.timeLineWrapper}`)
-
-    if (container) {
-      container.scrollLeft += scrollAmount
-    }
-  }
-
-  useEffect(() => {
-    const container = document.querySelector(`.${s.timeLineWrapper}`)
-
-    if (container) {
-      container.addEventListener('wheel', handleWheel as any)
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener('wheel', handleWheel as any)
-      }
-    }
-  }, [])
-
-  //-----
-
-  return (
-    <div>
-      <h2 style={{ margin: '20px 0 20px 20px' }}>Задачи по датам:</h2>
-      <div className={s.timeLineWrapper}>
-        <TasksTimeline setTasks={setTasks} tasks={tasks} updateTodolist={updateTodolist} />
-      </div>
-    </div>
-  )
-}
-
-Planning.getLayout = getSidebarLayout
-
-export default Planning
-
-const TasksTimeline = ({ tasks, updateTodolist }: any) => {
+export const TasksTimeline = ({ className, tasks, updateTodolist }: any) => {
   const [groupedTasks, setGroupedTasks] = useState<GroupedTasks>({})
 
   const dates = generateDatesForNextMonth()
@@ -180,14 +113,36 @@ const TasksTimeline = ({ tasks, updateTodolist }: any) => {
     })
   }
 
+  const handleWheel = (event: WheelEvent) => {
+    event.preventDefault()
+    const scrollAmount = event.deltaY
+    const container = document.querySelector(`.${s.taskTimelineContainer}`)
+
+    if (container) {
+      container.scrollLeft += scrollAmount
+    }
+  }
+
+  useEffect(() => {
+    const container = document.querySelector(`.${s.taskTimelineContainer}`)
+
+    if (container) {
+      container.addEventListener('wheel', handleWheel as any)
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('wheel', handleWheel as any)
+      }
+    }
+  }, [])
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className={s.taskTimelineContainer}>
-        <div className={s.taskTimeline}>
-          {dates.map((date, datesIndex) => (
-            <TimelineDate date={date} datesIndex={datesIndex} groupedTasks={groupedTasks} key={date} />
-          ))}
-        </div>
+      <div className={clsx(s.taskTimelineContainer, className)}>
+        {dates.map((date, datesIndex) => (
+          <TimelineDate date={date} datesIndex={datesIndex} groupedTasks={groupedTasks} key={date} />
+        ))}
       </div>
     </DragDropContext>
   )

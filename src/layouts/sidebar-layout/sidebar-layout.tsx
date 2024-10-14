@@ -45,10 +45,10 @@ export const SidebarLayout = ({ children }: PropsWithChildren) => {
                   Редактор задач
                 </Link>
               </li>
-              <li className={router.pathname === '/dashboard' ? clsx(s.listItemActive, s.listItem) : s.listItem}>
+              <li className={router.pathname === '/tasks-board' ? clsx(s.listItemActive, s.listItem) : s.listItem}>
                 <Link
-                  className={router.pathname === '/dashboard' ? clsx(s.linkActive, s.linkBtn) : s.linkBtn}
-                  href={'/dashboard'}
+                  className={router.pathname === '/tasks-board' ? clsx(s.linkActive, s.linkBtn) : s.linkBtn}
+                  href={'/tasks-board'}
                 >
                   Доска задач
                 </Link>
