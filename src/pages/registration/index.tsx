@@ -12,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
-import s from './index.module.scss'
+import s from './registration.module.scss'
 
 type ServerError = {
   data: {

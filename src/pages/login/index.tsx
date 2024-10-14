@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Loader } from '@/components/loader/loader'
@@ -13,7 +12,7 @@ import { z } from 'zod'
 
 import 'react-toastify/dist/ReactToastify.css'
 
-import s from './index.module.scss'
+import s from './login.module.scss'
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),

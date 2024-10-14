@@ -6,7 +6,7 @@ import { dateFormatter } from '@/shared/utils/dateFormatter'
 import { dateSorter } from '@/shared/utils/dateSorter'
 import { clsx } from 'clsx'
 
-import s from './index.module.scss'
+import s from './completed.module.scss'
 
 const CompletedPage = () => {
   const { data: todolists } = useGetTodoListsQuery()

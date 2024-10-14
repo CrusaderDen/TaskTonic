@@ -6,7 +6,7 @@ import { dateFormatter } from '@/shared/utils/dateFormatter'
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
 import { clsx } from 'clsx'
 
-import s from './index.module.scss'
+import s from './dashboard.module.scss'
 
 type GroupedTasks = {
   [key: string]: []

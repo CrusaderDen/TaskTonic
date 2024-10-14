@@ -9,7 +9,7 @@ import { dateFormatter } from '@/shared/utils/dateFormatter'
 import { dateSorter } from '@/shared/utils/dateSorter'
 import { clsx } from 'clsx'
 
-import s from './index.module.scss'
+import s from './editor.module.scss'
 
 function Todolists() {
   const { data: todolists, isLoading: isTodoLoading } = useGetTodoListsQuery()
