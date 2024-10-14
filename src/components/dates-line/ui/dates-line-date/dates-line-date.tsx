@@ -22,12 +22,16 @@ export const DatesLineDate = ({ date, datesIndex, groupedTasks }: DatesLineDateP
     return currentDay === 0 ? DAYS[6] : DAYS[currentDay - 1]
   }
 
+  const currentDay = getDay(date)
+
+  const dayNameCN = clsx(s.dayName, currentDay === DAYS[5] || currentDay === DAYS[6] ? s.weekend : '')
+
   return (
     <Droppable droppableId={date}>
       {provided => (
         <div className={s.dateWrapper} ref={provided.innerRef} {...provided.droppableProps}>
-          <h3>{yesterday ? `${dateFormatter(date)} (вчера)` : dateFormatter(date)}</h3>
-          <h4 style={{ marginBottom: '5px', textAlign: 'center' }}>{getDay(date)}</h4>
+          <h3 className={dayNameCN}>{yesterday ? `${dateFormatter(date)} (вчера)` : dateFormatter(date)}</h3>
+          <h4 className={dayNameCN}>{currentDay}</h4>
           <div className={yesterday ? clsx(s.taskDate, s.taskDateYesterday) : s.taskDate}>
             <div className={s.taskList}>
               {groupedTasks[date] ? (
