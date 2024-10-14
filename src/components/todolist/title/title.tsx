@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import DatePicker from 'react-datepicker'
+import DatePicker, { registerLocale } from 'react-datepicker'
 
 import { useDeleteTodolistMutation, useUpdateTodolistMutation } from '@/service/todolists/todolists-api'
 import { todolistServerType } from '@/service/todolists/todolists-api-types'
@@ -8,12 +8,19 @@ import { Input } from '@/shared/lib/ui/input/input'
 import * as Popover from '@radix-ui/react-popover'
 import { startOfToday, subDays } from 'date-fns'
 
+registerLocale('ru', ru)
+
+import { ru } from 'date-fns/locale'
+
 import s from './title.module.scss'
 
 type TitleProps = {
   hideCalendar?: true
   todo: todolistServerType
 }
+
+const CUSTOM_WEEK_DAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+
 export const Title = ({ hideCalendar, todo }: TitleProps) => {
   const [newTodoTitle, setNewTodoTitle] = useState(todo ? todo.title : '')
   const [editMode, setEditMode] = useState(false)
@@ -83,17 +90,13 @@ export const Title = ({ hideCalendar, todo }: TitleProps) => {
   const calendar = (
     <div>
       <DatePicker
-        dateFormat={'MMMM d, yyyy h:mm aa'}
         filterDate={isDateAllowed}
         inline
+        locale={'ru'}
         onChange={(date: any) => {
           setStartDate(date)
         }}
         selected={startDate}
-        // showTimeSelect
-        // timeCaption={'time'}
-        // timeFormat={'HH:mm'}
-        // timeIntervals={15}
       />
       <Button fullWidth onClick={() => handleDate(startDate)} style={{ position: 'relative', top: '-5px' }}>
         Подтвердить время
