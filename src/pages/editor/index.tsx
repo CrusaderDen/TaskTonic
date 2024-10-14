@@ -1,5 +1,3 @@
-import { useCallback, useState } from 'react'
-
 import { CreateTodolist } from '@/components/create-todolist/create-todolist'
 import { Loader } from '@/components/loader/loader'
 import { Todolist } from '@/components/todolist/todolist'

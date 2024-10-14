@@ -3,6 +3,7 @@ import { getSidebarLayout } from '@/layouts/sidebar-layout/sidebar-layout'
 import { useGetTodoListsQuery, useUpdateTodolistMutation } from '@/service/todolists/todolists-api'
 import { Button } from '@/shared/lib/ui/button/button'
 import { dateFormatter } from '@/shared/utils/dateFormatter'
+import { dateSorter } from '@/shared/utils/dateSorter'
 import { clsx } from 'clsx'
 
 import s from './index.module.scss'
@@ -30,7 +31,9 @@ const CompletedPage = () => {
     await updateTodolist(data).unwrap()
   }
 
-  const filteredTodo = todolists?.filter(todo => todo.status === 1)
+  const filteredTodo = todolists
+    ?.filter(todo => todo.status === 1)
+    .sort((a, b) => dateSorter({ a: a.endDate, b: b.endDate, sortType: 'desc' }))
 
   return (
     <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
