@@ -19,8 +19,6 @@ type TitleProps = {
   todo: todolistServerType
 }
 
-const CUSTOM_WEEK_DAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
-
 export const Title = ({ hideCalendar, todo }: TitleProps) => {
   const [newTodoTitle, setNewTodoTitle] = useState(todo ? todo.title : '')
   const [editMode, setEditMode] = useState(false)
