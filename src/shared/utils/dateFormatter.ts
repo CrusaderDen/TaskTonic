@@ -4,6 +4,7 @@ export const dateFormatter = (date: null | string) => {
     return ''
   }
   const shortMonth = ['янв', 'февр', 'март', 'апр', 'май', 'июнь', 'июль', 'авг', 'сент', 'окт', 'нояб', 'дек']
+
   const datePart = date.split('T')[0]
 
   const month = +datePart.split('-')[1]
