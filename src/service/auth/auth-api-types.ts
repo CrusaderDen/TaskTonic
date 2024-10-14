@@ -22,6 +22,7 @@ export type UserResponse = {
   password: string
   surname: string
 }
+
 export type verifyEmailResponse = {
   data?: any
   httpCode: number

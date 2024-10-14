@@ -2,6 +2,7 @@ import { CreateTodolist } from '@/components/create-todolist/create-todolist'
 import { Loader } from '@/components/loader/loader'
 import { Todolist } from '@/components/todolist/todolist'
 import { getSidebarLayout } from '@/layouts/sidebar-layout/sidebar-layout'
+import { useMeQuery } from '@/service/auth/auth-api'
 import { useGetTodoListsQuery, useUpdateTodolistMutation } from '@/service/todolists/todolists-api'
 import { getTodolistsResponse, todolistServerType } from '@/service/todolists/todolists-api-types'
 import { Button } from '@/shared/lib/ui/button/button'
@@ -14,6 +15,9 @@ import s from './editor.module.scss'
 function Todolists() {
   const { data: todolists, isLoading: isTodoLoading } = useGetTodoListsQuery()
   const [updateTodolist] = useUpdateTodolistMutation()
+
+  useMeQuery()
+
   const handleUpdateTodolistStatus = async (todo: any) => {
     if (!confirm('Отметить задачу как выполненную?')) {
       return

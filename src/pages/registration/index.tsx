@@ -1,9 +1,8 @@
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Loader } from '@/components/loader/loader'
 import { VideoBackground } from '@/components/video-background/video-background'
-import { useCreateUserMutation, useVerifyEmailMutation } from '@/service/auth/auth-api'
+import { useCreateUserMutation } from '@/service/auth/auth-api'
 import { UserArgs } from '@/service/auth/auth-api-types'
 import { Button } from '@/shared/lib/ui/button/button'
 import { Input } from '@/shared/lib/ui/input/input'
@@ -42,8 +41,7 @@ export default function Registration() {
     setError,
   } = useForm<registrationSchemaData>({ resolver: zodResolver(registrationSchema) })
   const [createUser, { isLoading }] = useCreateUserMutation()
-  const [verifyEmail] = useVerifyEmailMutation()
-  const [verificationCode, setVerificationCode] = useState('')
+
   const onSubmit = async (data: any) => {
     if (data.password !== data.confirmPassword) {
       setError('confirmPassword', {
@@ -76,14 +74,6 @@ export default function Registration() {
     }
   }
 
-  const handleVerifyEmail = async () => {
-    if (!verificationCode) {
-      return
-    }
-    await verifyEmail(verificationCode)
-    void router.push('/login')
-  }
-
   return (
     <div data-styles={'default'}>
       {isLoading && <Loader />}
@@ -114,19 +104,6 @@ export default function Registration() {
             Send email
           </Button>
         </form>
-        <div className={s.verificationWrapper}>
-          <Input
-            label={'Please enter the verification code from your email to complete this registration.'}
-            onChange={e => {
-              setVerificationCode(e.target.value)
-            }}
-            placeholder={''}
-            value={verificationCode}
-          />
-          <Button onClick={handleVerifyEmail} variant={'ghost'}>
-            OK
-          </Button>
-        </div>
       </div>
       <VideoBackground />
     </div>

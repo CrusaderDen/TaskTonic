@@ -13,3 +13,17 @@ export const notifyError = (errorMsg: string | undefined) => {
     transition: Bounce,
   })
 }
+
+export const notifySuccess = (successMsg: string | undefined) => {
+  toast.success(successMsg, {
+    autoClose: 5000,
+    closeOnClick: true,
+    draggable: true,
+    hideProgressBar: false,
+    pauseOnHover: true,
+    position: 'bottom-center',
+    progress: undefined,
+    theme: 'colored',
+    transition: Bounce,
+  })
+}

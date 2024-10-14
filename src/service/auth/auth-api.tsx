@@ -31,10 +31,10 @@ export const authApi = appApi.injectEndpoints({
     }),
     me: builder.query<void, void>({ query: () => '/me' }),
     verifyEmail: builder.mutation<verifyEmailResponse, string>({
-      query: args => {
+      query: key => {
         return {
           method: 'POST',
-          url: `/logout/${args}`,
+          url: `/verifyEmail/${key}`,
         }
       },
     }),
